@@ -3,7 +3,9 @@ const { createPost,
     likeAndUnlikePost,
     deletePost,
     getPostOfFollowing,
-    updateCaption }
+    updateCaption, 
+    postsComment,
+    deleteComment}
     = require("../controllers/post");
 const { isAuthenticated } = require("../middlewares/auth");
 const router = express.Router();
@@ -13,4 +15,5 @@ router.route("/post/:id")
     .delete(isAuthenticated, deletePost)
     .put(isAuthenticated, updateCaption)
 router.route("/posts").get(isAuthenticated, getPostOfFollowing)
+router.route("/post/comment/:id").put(isAuthenticated,postsComment).delete(isAuthenticated,deleteComment)
 module.exports = router;

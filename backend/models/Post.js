@@ -20,16 +20,17 @@ const postSchema = new mongoose.Schema({
         type: Date,
         default: Date.now,
     },
-    comments: {
-        user: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "User",
+    comments: [
+        {
+            user: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "User",
+            },
+            comment: {
+                type: String,
+                required: true,
+            },
         },
-        comment: {
-            type: String,
-            require: true,
-        }
-    }
-},
-);
-module.exports=mongoose.model("Post",postSchema)
+    ],
+});
+module.exports = mongoose.model("Post", postSchema)

@@ -4,7 +4,8 @@ const jwt = require("jsonwebtoken");
 exports.isAuthenticated = async (req, res, next) => {
   try {
     let token = req.headers['cookie'];
-    token = token.split("=")[1].trim()
+    token = token?.split("=")[1]?.trim();
+    
 
 
     if (!token) {

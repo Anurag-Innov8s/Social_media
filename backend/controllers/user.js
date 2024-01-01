@@ -1,5 +1,7 @@
 const User = require("../models/User")
 const Post = require("../models/Post")
+const {sendEmail} = require("../middlewares/sendEmail")
+
 exports.register = async (req, res) => {
 
     try {
@@ -7,7 +9,8 @@ exports.register = async (req, res) => {
         let user = await User.findOne({ email });
         if (user) {
             return res.status(400).json({
-                success: false, message: "User already exists"
+                success: false, 
+                message: "User already exists"
             })
         }
         user = await User.create({
@@ -28,6 +31,10 @@ exports.register = async (req, res) => {
             user,
             token,
         });
+        // res.status(200).json({
+        //     success:true,
+        //     message:"Registered Successfully."
+        // })
     } catch (error) {
         res.status(500).json({
             success: false,
@@ -197,15 +204,17 @@ exports.updateProfile = async (req, res) => {
 
 exports.deleteMyProfile = async (req, res) => {
     try {
-        const user = User.findById(req.user._id);
+        const user = await User.findById(req.user._id);
         const posts = user.posts;
         const followers = user.followers;
         const following = user.following;
-        await user.deleteOne()
+        await user.deleteOne();
         res.status(200).cookie("token", null, { expires: new Date(Date.now()), httpOnly: true })
         for (let i = 0; i < posts.length; i++) {
             const post = await Post.findById(posts[i]);
-            await post.remove();
+            if (post) {
+                await post.deleteOne();
+            }
         }
 
         // Removing User from Follower's Following
@@ -322,3 +331,53 @@ exports.getAllUsers=async(req,res)=>{
           });
     }
 }
+
+exports.forgotPassword = async (req, res) => {
+    try {
+      const user = await User.findOne({ email: req.body.email });
+  
+      if (!user) {
+        return res.status(404).json({
+          success: false,
+          message: "User not found",
+        });
+      }
+  
+      const resetPasswordToken = user.getResetPasswordToken();
+  
+      await user.save();
+  
+      const resetUrl = `${req.protocol}://${req.get(
+        "host"
+      )}/password/reset/${resetPasswordToken}`;
+  
+      const message = `Reset Your Password by clicking on the link below: \n\n ${resetUrl}`;
+  
+      try {
+        await sendEmail({
+          email: user.email,
+          subject: "Reset Password",
+          message,
+        });
+  
+        res.status(200).json({
+          success: true,
+          message: `Email sent to ${user.email}`,
+        });
+      } catch (error) {
+        user.resetPasswordToken = undefined;
+        user.resetPasswordExpire = undefined;
+        await user.save();
+  
+        res.status(500).json({
+          success: false,
+          message: error.message,
+        });
+      }
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        message: error.message,
+      });
+    }
+  };

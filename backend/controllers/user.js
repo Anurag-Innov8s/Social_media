@@ -1,6 +1,7 @@
 const User = require("../models/User")
 const Post = require("../models/Post")
-const {sendEmail} = require("../middlewares/sendEmail")
+const { sendEmail } = require("../middlewares/sendEmail")
+const crypto = require("crypto")
 
 exports.register = async (req, res) => {
 
@@ -9,7 +10,7 @@ exports.register = async (req, res) => {
         let user = await User.findOne({ email });
         if (user) {
             return res.status(400).json({
-                success: false, 
+                success: false,
                 message: "User already exists"
             })
         }
@@ -218,48 +219,48 @@ exports.deleteMyProfile = async (req, res) => {
         }
 
         // Removing User from Follower's Following
-    for (let i = 0; i < followers.length; i++) {
-        const follower = await User.findById(followers[i]);
-  
-        const index = follower.following.indexOf(userId);
-        follower.following.splice(index, 1);
-        await follower.save();
-      }
-  
-      // Removing User from Following's Followers
-      for (let i = 0; i < following.length; i++) {
-        const follows = await User.findById(following[i]);
-  
-        const index = follows.followers.indexOf(userId);
-        follows.followers.splice(index, 1);
-        await follows.save();
-      }
-  
-      // removing all comments of the user from all posts
-      const allPosts = await Post.find();
-  
-      for (let i = 0; i < allPosts.length; i++) {
-        const post = await Post.findById(allPosts[i]._id);
-  
-        for (let j = 0; j < post.comments.length; j++) {
-          if (post.comments[j].user === userId) {
-            post.comments.splice(j, 1);
-          }
+        for (let i = 0; i < followers.length; i++) {
+            const follower = await User.findById(followers[i]);
+
+            const index = follower.following.indexOf(userId);
+            follower.following.splice(index, 1);
+            await follower.save();
         }
-        await post.save();
-      }
-      // removing all likes of the user from all posts
-  
-      for (let i = 0; i < allPosts.length; i++) {
-        const post = await Post.findById(allPosts[i]._id);
-  
-        for (let j = 0; j < post.likes.length; j++) {
-          if (post.likes[j] === userId) {
-            post.likes.splice(j, 1);
-          }
+
+        // Removing User from Following's Followers
+        for (let i = 0; i < following.length; i++) {
+            const follows = await User.findById(following[i]);
+
+            const index = follows.followers.indexOf(userId);
+            follows.followers.splice(index, 1);
+            await follows.save();
         }
-        await post.save();
-      }
+
+        // removing all comments of the user from all posts
+        const allPosts = await Post.find();
+
+        for (let i = 0; i < allPosts.length; i++) {
+            const post = await Post.findById(allPosts[i]._id);
+
+            for (let j = 0; j < post.comments.length; j++) {
+                if (post.comments[j].user === userId) {
+                    post.comments.splice(j, 1);
+                }
+            }
+            await post.save();
+        }
+        // removing all likes of the user from all posts
+
+        for (let i = 0; i < allPosts.length; i++) {
+            const post = await Post.findById(allPosts[i]._id);
+
+            for (let j = 0; j < post.likes.length; j++) {
+                if (post.likes[j] === userId) {
+                    post.likes.splice(j, 1);
+                }
+            }
+            await post.save();
+        }
 
 
 
@@ -294,86 +295,212 @@ exports.myProfile = async (req, res) => {
     }
 };
 
-exports.getUserProfile=async(req,res)=>{
+exports.getUserProfile = async (req, res) => {
     try {
         const user = await User.findById(req.params.id)
-        .populate("posts followers following")
+            .populate("posts followers following")
         if (!user) {
             return res.status(404).json({
-              success: false,
-              message: "User not found",
+                success: false,
+                message: "User not found",
             });
-          }
-      
-          res.status(200).json({
+        }
+
+        res.status(200).json({
             success: true,
             user,
-          });
+        });
     } catch (error) {
         res.status(500).json({
             success: false,
             message: error.message,
-          });
+        });
     }
 }
 
-exports.getAllUsers=async(req,res)=>{
+exports.getAllUsers = async (req, res) => {
     try {
         const users = await User.find({});
         res.status(200).json({
-            success:true,
+            success: true,
             users,
         })
     } catch (error) {
         res.status(500).json({
             success: false,
             message: error.message,
-          });
+        });
     }
 }
 
 exports.forgotPassword = async (req, res) => {
     try {
-      const user = await User.findOne({ email: req.body.email });
-  
-      if (!user) {
-        return res.status(404).json({
-          success: false,
-          message: "User not found",
+        const user = await User.findOne({ email: req.body.email });
+
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                message: "User not found",
+            });
+        }
+
+        const resetPasswordToken = user.getResetPasswordToken();
+
+        await user.save();
+
+        const resetUrl = `${req.protocol}://${req.get(
+            "host"
+        )}/password/reset/${resetPasswordToken}`;
+
+        const message = `Reset Your Password by clicking on the link below: \n\n ${resetUrl}`;
+
+        try {
+            await sendEmail({
+                email: user.email,
+                subject: "Reset Password",
+                message,
+            });
+
+            res.status(200).json({
+                success: true,
+                message: `Email sent to ${user.email}`,
+            });
+        } catch (error) {
+            user.resetPasswordToken = undefined;
+            user.resetPasswordExpire = undefined;
+            await user.save();
+
+            res.status(500).json({
+                success: false,
+                message: error.message,
+            });
+        }
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: error.message,
         });
-      }
-  
-      const resetPasswordToken = user.getResetPasswordToken();
-  
-      await user.save();
-  
-      const resetUrl = `${req.protocol}://${req.get(
-        "host"
-      )}/password/reset/${resetPasswordToken}`;
-  
-      const message = `Reset Your Password by clicking on the link below: \n\n ${resetUrl}`;
-  
-      try {
-        await sendEmail({
-          email: user.email,
-          subject: "Reset Password",
-          message,
-        });
-  
-        res.status(200).json({
-          success: true,
-          message: `Email sent to ${user.email}`,
-        });
-      } catch (error) {
+    }
+};
+
+exports.resetPassword = async (req, res) => {
+    try {
+        const resetPasswordToken = crypto
+            .createHash("sha256")
+            .update(req.params.token)
+            .digest("hex");
+
+        const user = await User.findOne({
+            resetPasswordToken,
+            resetPasswordExpire: { $gt: Date.now() },
+
+        })
+        if (!user) {
+            return res.status(401).json({
+                success: false,
+                message: "Either token is Invalid or has been expired."
+            })
+        }
+        user.password = req.body.password;
+
         user.resetPasswordToken = undefined;
         user.resetPasswordExpire = undefined;
+
         await user.save();
-  
-        res.status(500).json({
-          success: false,
-          message: error.message,
-        });
+
+        return res.status(200).json({
+            success: true,
+            message: "Password updated Successfully."
+        })
+
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: error.message
+        })
+    }
+}
+
+exports.getMyPosts = async (req, res) => {
+    try {
+        const user = await User.findById(req.user._id);
+        if (!user) {
+
+            return res.status(400).json({
+                success: false,
+                message: "User not found"
+            })
+        }
+        const posts = []
+
+        for (let i = 0; i < user.posts.length; i++) {
+            const post = await Post.findById(user.posts[i])
+                .populate("likes comments.user owner");
+            posts.push(post);
+        }
+
+        return res.status(200).json({
+            success: true,
+            posts,
+        })
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: error.message
+        })
+    }
+}
+
+// exports.getUserPosts = async (req, res) => {
+//     try {
+//         const user = await User.findById(req.params.id);
+//         if(!user){
+//             return res.status(400).json({
+//                 success:false,
+//                 message:"User not Found"
+//             })
+//         }
+//         const posts = []
+//         for(let i =0;i<user.posts.length;i++){
+//             const post = await Post.findById(user.posts[i])
+//             .populate("likes comments.user owner")
+//             posts.push(post);
+//         }
+
+//         return res.status(200).json({
+//             success:true,
+//             posts
+//         })
+//     } catch (error) {
+//         return res.status(500).json({
+//             success: false,
+//             message: error.message
+//         })
+//     }
+// }
+
+exports.getUserPosts = async (req, res) => {
+    try {
+      const user = await User.findById(req.params.id);
+      if(!user){
+        return res.status(400).json({
+            success:false,
+            message:"User not found"
+        })
       }
+      const posts = [];
+  
+      for (let i = 0; i < user.posts.length; i++) {
+        const post = await Post.findById(user.posts[i]).populate(
+          "likes comments.user owner"
+        );
+        posts.push(post);
+      }
+  
+      res.status(200).json({
+        success: true,
+        posts,
+      });
     } catch (error) {
       res.status(500).json({
         success: false,

@@ -16,4 +16,5 @@ router.route("/post/:id")
     .put(isAuthenticated, updateCaption)
 router.route("/posts").get(isAuthenticated, getPostOfFollowing)
 router.route("/post/comment/:id").put(isAuthenticated,postsComment).delete(isAuthenticated,deleteComment)
+
 module.exports = router;

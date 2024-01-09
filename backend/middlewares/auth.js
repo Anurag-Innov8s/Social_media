@@ -19,7 +19,7 @@ exports.isAuthenticated = async (req, res, next) => {
     next();
   } catch (error) {
     res.status(500).json({
-      // success:false,
+      success:false,
       message: error.message,
     });
   }

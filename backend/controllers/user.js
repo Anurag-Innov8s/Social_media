@@ -209,6 +209,7 @@ exports.deleteMyProfile = async (req, res) => {
         const posts = user.posts;
         const followers = user.followers;
         const following = user.following;
+        const userId = user._id;
         await user.deleteOne();
         res.status(200).cookie("token", null, { expires: new Date(Date.now()), httpOnly: true })
         for (let i = 0; i < posts.length; i++) {

@@ -47,6 +47,7 @@ exports.register = async (req, res) => {
 exports.login = async (req, res) => {
     try {
         const { email, password } = req.body;
+        if(!email || ! password) return res.status(400).json({success:false,message:"Please Enter Email and Password correctly"})
         const user = await User.findOne({ email }).select("+password");
         if (!user) {
             return res.status(400).json({

@@ -3,7 +3,7 @@ import Post from "../Post/Post";
 import User from "../User/User";
 import "./Home.css";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllUsers, getFollowingPosts } from "../../Actions/User";
+import { getFollowingPosts } from "../../Actions/User";
 import Loader from "../Loader/Loader";
 import { Typography } from "@mui/material";
 import { useAlert } from "react-alert";
@@ -24,7 +24,7 @@ const Home = () => {
 
   useEffect(() => {
     dispatch(getFollowingPosts());
-    dispatch(getAllUsers());
+    // dispatch(getAllUsers());
   }, [dispatch]);
 
   useEffect(() => {

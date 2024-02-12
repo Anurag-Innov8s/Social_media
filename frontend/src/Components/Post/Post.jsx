@@ -13,11 +13,9 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addCommentOnPost,
-  deletePost,
   likePost,
-  updatePost,
 } from "../../Actions/Post";
-import { getFollowingPosts, getMyPosts, loadUser } from "../../Actions/User";
+import { getFollowingPosts, getMyPosts} from "../../Actions/User";
 import User from "../User/User";
 import CommentCard from "../CommentCard/CommentCard";
 

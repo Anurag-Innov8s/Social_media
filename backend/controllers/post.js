@@ -11,15 +11,15 @@ exports.createPost = async (req, res) => {
         const newPostData = {
             caption: req.body.caption,
             image: {
-                public_id: "myCloud.public_id",
-                url: "myCloud.secure_url"
+                public_id: myCloud.public_id,
+                url: myCloud.secure_url
             },
             owner: req.user._id
         }
         const post = await Post.create(newPostData);
         const user = await User.findById(req.user._id);
 
-        user.posts.push(post._id);
+        user.posts.unshift(post._id);
         await user.save();
 
         res.status(201).json({
@@ -93,6 +93,7 @@ exports.deletePost = async (req, res) => {
             });
         }
 
+        await cloudinary.v2.uploader.destroy(post.image.public_id);
         await post.deleteOne()
 
         const user = await User.findById(req.user._id);

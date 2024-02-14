@@ -58,6 +58,8 @@ import { Link } from "react-router-dom"; const Account = () => {
               ownerImage={post.owner.avatar.url}
               ownerName={post.owner.name}
               ownerId={post.owner._id}
+              isAccount={true}
+              isDelete={true}
             />
           )) :
             <Typography variant='h6'>No Posts Yet</Typography>

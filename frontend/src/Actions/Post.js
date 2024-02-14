@@ -75,7 +75,7 @@ export const createNewPost = (caption,image) => async (dispatch) => {
       type: "newPostRequest",
     });
 
-    const { data } = await axios.delete("/post/upload", {
+    const { data } = await axios.post("/post/upload", {
       caption,
       image
     },{
@@ -90,6 +90,56 @@ export const createNewPost = (caption,image) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: "newPostFailure",
+      payload: error.response.data.message,
+    });
+  }
+};
+
+export const updatePost = (caption,id) => async (dispatch) => {
+  try {
+    dispatch({
+      type: "updateCaptionRequest",
+    });
+
+    const { data } = await axios.put(`/post/${id}`, {
+      caption,
+    },{
+      headers: {
+        "content-Type":"application/json"
+      }
+    });
+    dispatch({
+      type: "updateCaptionSuccess",
+      payload: data.message,
+    });
+  } catch (error) {
+    dispatch({
+      type: "updateCaptionFailure",
+      payload: error.response.data.message,
+    });
+  }
+};
+
+export const deletePost = (id) => async (dispatch) => {
+  try {
+    dispatch({
+      type: "deletePostRequest",
+    });
+
+    const { data } = await axios.delete(`/post/${id}`, {
+      id,
+    },{
+      headers: {
+        "content-Type":"application/json"
+      }
+    });
+    dispatch({
+      type: "deletePostSuccess",
+      payload: data.message,
+    });
+  } catch (error) {
+    dispatch({
+      type: "deletePostFailure",
       payload: error.response.data.message,
     });
   }

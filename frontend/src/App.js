@@ -8,6 +8,7 @@ import { loadUser } from "./Actions/User";
 import Home from "./Components/Home/Home";
 import Account from "./Components/Account/Account";
 import NewPost from "./Components/NewPost/NewPost";
+import Register from "./Components/Register/Register";
 
 function App() {
   const dispatch = useDispatch();
@@ -28,6 +29,7 @@ function App() {
           path="/newpost"
           element={isAuthenticated ? <NewPost /> : <Login />}
         />
+        <Route path="/register" element={isAuthenticated ? <Account/> : <Register></Register>}></Route>
       </Routes>
     </Router>
   );

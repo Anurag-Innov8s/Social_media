@@ -106,3 +106,21 @@ export const getAllUsers =
       });
     }
   };
+
+  export const logoutUser = (email, password) => async (dispatch) => {
+    try {
+      dispatch({
+        type: "LogoutUserRequest",
+      });
+  
+      await axios.get("/logout")
+      dispatch({
+        type: "LogoutUserSuccess",
+      });
+    } catch (error) {
+      dispatch({
+        type: "LogoutUserFailure",
+        payload: error.response.data.message,
+      });
+    }
+  };

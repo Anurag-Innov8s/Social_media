@@ -19,6 +19,7 @@ const Login = () => {
     e.preventDefault();
 
     dispatch(loginUser(email, password));
+    alert.success("Logged in Successfully")
   };
 
   useEffect(() => {

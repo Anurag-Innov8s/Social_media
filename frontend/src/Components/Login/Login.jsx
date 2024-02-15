@@ -19,7 +19,7 @@ const Login = () => {
     e.preventDefault();
 
     dispatch(loginUser(email, password));
-    alert.success("Logged in Successfully")
+    // alert.success("Logged in Successfully")
   };
 
   useEffect(() => {
@@ -27,7 +27,7 @@ const Login = () => {
       alert.error(error);
       dispatch({ type: "clearErrors" });
     }
-    if (message) {
+    else if (message) {
       alert.success(message);
       dispatch({ type: "clearMessage" });
     }

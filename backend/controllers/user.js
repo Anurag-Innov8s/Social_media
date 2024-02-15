@@ -3,6 +3,7 @@ const Post = require("../models/Post")
 const { sendEmail } = require("../middlewares/sendEmail")
 const crypto = require("crypto")
 const cloudinary = require("cloudinary")
+const { log } = require("console")
 exports.register = async (req, res) => {
 
     try {
@@ -181,32 +182,40 @@ exports.updatePassword = async (req, res) => {
 
 exports.updateProfile = async (req, res) => {
     try {
-        const user = await User.findById(req.user._id)
-        const { name, email } = req.body
-        if (!name && !email) {
-            return res.status(400).json({
-                success: false,
-                message: "Please Enter name or email"
-            })
-        }
-        if (name) {
-            user.name = name;
-        }
-        if (email) {
-            user.email = email;
-        }
-        user.save();
-        return res.status(200).json({
-            success: true,
-            message: "Profile Updated"
-        })
+      const user = await User.findById(req.user._id);
+  
+      const { name, email, avatar } = req.body;
+  
+      if (name) {
+        user.name = name;
+      }
+      if (email) {
+        user.email = email;
+      }
+  
+      if (avatar) {
+        await cloudinary.v2.uploader.destroy(user.avatar.public_id);
+  
+        const myCloud = await cloudinary.v2.uploader.upload(avatar, {
+          folder: "avatars",
+        });
+        user.avatar.public_id = myCloud.public_id;
+        user.avatar.url = myCloud.secure_url;
+      }
+  
+      await user.save();
+  
+      res.status(200).json({
+        success: true,
+        message: "Profile Updated",
+      });
     } catch (error) {
-        return res.status(500).json({
-            success: false,
-            message: error.message
-        })
+      res.status(500).json({
+        success: false,
+        message: error.message,
+      });
     }
-}
+  };
 
 exports.deleteMyProfile = async (req, res) => {
     try {
@@ -215,10 +224,14 @@ exports.deleteMyProfile = async (req, res) => {
         const followers = user.followers;
         const following = user.following;
         const userId = user._id;
+
+        await cloudinary.v2.uploader.destroy(user.avatar.public_id)
+
         await user.deleteOne();
         res.status(200).cookie("token", null, { expires: new Date(Date.now()), httpOnly: true })
         for (let i = 0; i < posts.length; i++) {
             const post = await Post.findById(posts[i]);
+            await cloudinary.v2.uploader.destroy(post.image.public_id)
             if (post) {
                 await post.deleteOne();
             }

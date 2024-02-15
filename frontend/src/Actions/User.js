@@ -231,3 +231,55 @@ export const getAllUsers =
       });
     }
   };
+
+  export const forgotPassword = (email) => async (dispatch) => {
+    try {
+      dispatch({
+        type: "forgotPasswordRequest",
+      });
+  
+      const { data } = await axios.post(
+        "/forgot/password",
+        {email},
+        {headers:{
+          "content-Type":"application/json",
+        }}
+      );
+  
+      dispatch({
+        type: "forgotPasswordSuccess",
+        payload: data.message,
+      });
+    } catch (error) {
+      dispatch({
+        type: "forgotPasswordFailure",
+        payload: error.response.data.message,
+      });
+    }
+  };
+
+  export const resetPassword = (token,password) => async (dispatch) => {
+    try {
+      dispatch({
+        type: "resetPasswordRequest",
+      });
+  
+      const { data } = await axios.put(
+        `/password/reset/${token}`,
+        {password},
+        {headers:{
+          "content-Type":"application/json",
+        }}
+      );
+  
+      dispatch({
+        type: "resetPasswordSuccess",
+        payload: data.message,
+      });
+    } catch (error) {
+      dispatch({
+        type: "resetPasswordFailure",
+        payload: error.response.data.message,
+      });
+    }
+  };

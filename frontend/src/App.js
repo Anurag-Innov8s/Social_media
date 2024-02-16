@@ -13,6 +13,9 @@ import UpdateProfile from "./Components/UpdateProfile/UpdateProfile";
 import UpdatePassword from "./Components/UpdatePassword/UpdatePassword";
 import ForgotPassword from "./Components/ForgotPassword/ForgotPassword";
 import ResetPassword from "./Components/ResetPassword/ResetPassword";
+import UserProfile from "./Components/UpdateProfile/UpdateProfile";
+import Search from "./Components/Search/Search"
+import NotFound from "./Components/NotFound/NotFound";
 
 function App() {
   const dispatch = useDispatch();
@@ -39,6 +42,10 @@ function App() {
         <Route path="/update/password" element={isAuthenticated ? <UpdatePassword/> : <Login/>}></Route>
         <Route path="/forgot/password" element={isAuthenticated ? <UpdatePassword/> : <ForgotPassword/>}></Route>
         <Route path="/password/reset/:token" element={isAuthenticated ? <UpdatePassword/> : <ResetPassword/>}></Route>
+        <Route path="/user/:id" element={isAuthenticated ? <UserProfile/> : <Login/>}></Route>
+        <Route path="search" element={isAuthenticated ? <Search/> : <Login/>}></Route>
+        <Route path="*" element={<NotFound/>}></Route>
+
 
       </Routes>
     </Router>

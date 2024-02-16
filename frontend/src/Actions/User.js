@@ -283,3 +283,60 @@ export const getAllUsers =
       });
     }
   };
+
+  export const getUserPosts = (id) => async (dispatch) => {
+    try {
+      dispatch({
+        type: "userPostsRequest",
+      });
+  
+      const { data } = await axios.get(`/user/post/${id}`);
+      dispatch({
+        type: "userPostsSuccess",
+        payload: data.posts,
+      });
+    } catch (error) {
+      dispatch({
+        type: "userPostsFailure",
+        payload: error.response.data.message,
+      });
+    }
+  };
+
+  export const getUserProfile = (id) => async (dispatch) => {
+    try {
+      dispatch({
+        type: "userProfileRequest",
+      });
+  
+      const { data } = await axios.get(`/user/${id}`);
+      dispatch({
+        type: "userProfileSuccess",
+        payload: data.posts,
+      });
+    } catch (error) {
+      dispatch({
+        type: "userProfileFailure",
+        payload: error.response.data.message,
+      });
+    }
+  };
+
+  export const followAndUnfollowUser = (id) => async (dispatch) => {
+    try {
+      dispatch({
+        type: "followUserRequest",
+      });
+  
+      const { data } = await axios.get(`/follow/${id}`);
+      dispatch({
+        type: "followUserSuccess",
+        payload: data.posts,
+      });
+    } catch (error) {
+      dispatch({
+        type: "followUserFailure",
+        payload: error.response.data.message,
+      });
+    }
+  };

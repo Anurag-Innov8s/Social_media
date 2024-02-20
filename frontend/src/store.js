@@ -14,8 +14,8 @@ const store = configureStore({
     allUsers: allUsersReducer,
     like: likeReducer,
     myPosts: myPostsReducer,
-    userPosts: userPostsReducer,
     userProfile: userProfileReducer,
+    userPosts: userPostsReducer,
   },
 });
 

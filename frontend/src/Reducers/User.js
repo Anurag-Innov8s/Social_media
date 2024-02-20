@@ -103,7 +103,7 @@ export const userProfileReducer = createReducer(initialState, {
   },
   userProfileSuccess: (state, action) => {
     state.loading = false;
-    state.users = action.payload;
+    state.user = action.payload;
   },
   userProfileFailure: (state, action) => {
     state.loading = false;

@@ -36,15 +36,15 @@ const Search = () => {
 
         <div searchResults>
         {users && 
-            users.map((user) => {
-                <User
-                    key={user._id}
-                    userId={user._id}
-                    name={user.name}
-                    avatar={user.avatar.url}
-                ></User>
-            })
-        }
+          users.map((user)=>(
+            <User
+              key={user._id}
+              userId={user._id}
+              name={user.name}
+              avatar={user.avatar.url}
+            />
+          ))
+          }
       </div>
       </form>
 

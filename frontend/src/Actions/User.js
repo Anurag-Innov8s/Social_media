@@ -156,6 +156,7 @@ export const getAllUsers =
 
   export const updateProfile = (name, email,password, avatar) => async (dispatch) => {
     try {
+      console.log(avatar);
       dispatch({
         type: "updateProfileRequest",
       });
@@ -210,7 +211,7 @@ export const getAllUsers =
     }
   };
 
-  export const deleteProfile = () => async (dispatch) => {
+  export const deleteMyProfile = () => async (dispatch) => {
     try {
       dispatch({
         type: "deleteProfileRequest",
@@ -290,7 +291,7 @@ export const getAllUsers =
         type: "userPostsRequest",
       });
   
-      const { data } = await axios.get(`/user/post/${id}`);
+      const { data } = await axios.get(`/user/posts/${id}`);
       dispatch({
         type: "userPostsSuccess",
         payload: data.posts,
@@ -312,7 +313,7 @@ export const getAllUsers =
       const { data } = await axios.get(`/user/${id}`);
       dispatch({
         type: "userProfileSuccess",
-        payload: data.posts,
+        payload: data.user,
       });
     } catch (error) {
       dispatch({

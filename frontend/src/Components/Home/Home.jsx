@@ -21,7 +21,7 @@ const Home = () => {
   );
 
   const { error: likeError, message } = useSelector((state) => state.like);
-    
+
   useEffect(() => {
     dispatch(getFollowingPosts());
     dispatch(getAllUsers());

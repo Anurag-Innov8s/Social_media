@@ -5,49 +5,46 @@ const crypto = require("crypto")
 const cloudinary = require("cloudinary")
 const { log } = require("console")
 exports.register = async (req, res) => {
-
     try {
-        const { name, email, password, avatar } = req.body;
-        let user = await User.findOne({ email });
-        if (user) {
-            return res.status(400).json({
-                success: false,
-                message: "User already exists"
-            })
-        }
-
-        const myCloud = await cloudinary.v2.uploader.upload(avatar,{
-            floder: "avatars",
-        })
-        user = await User.create({
-            name,
-            email,
-            password,
-            avatar: { public_id: myCloud.public_id, url: myCloud.secure_url },
-        });
-        const token = await user.generateToken();
-
-        const options = {
-            expires: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
-            httpOnly: true,
-        };
-
-        res.status(200).cookie("token", token, options).json({
-            success: true,
-            user,
-            token,
-        });
-        // res.status(200).json({
-        //     success:true,
-        //     message:"Registered Successfully."
-        // })
+      const { name, email, password, avatar } = req.body;
+  
+      let user = await User.findOne({ email });
+      if (user) {
+        return res
+          .status(400)
+          .json({ success: false, message: "User already exists" });
+      }
+  
+      const myCloud = await cloudinary.v2.uploader.upload(avatar, {
+        folder: "myAvatars",
+      });
+  
+      user = await User.create({
+        name,
+        email,
+        password,
+        avatar: { public_id: myCloud.public_id, url: myCloud.secure_url },
+      });
+  
+      const token = await user.generateToken();
+  
+      const options = {
+        expires: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
+        httpOnly: true,
+      };
+  
+      res.status(201).cookie("token", token, options).json({
+        success: true,
+        user,
+        token,
+      });
     } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: error.message,
-        });
+      res.status(500).json({
+        success: false,
+        message: error.message,
+      });
     }
-};
+  };
 
 exports.login = async (req, res) => {
     try {
@@ -197,7 +194,7 @@ exports.updateProfile = async (req, res) => {
         await cloudinary.v2.uploader.destroy(user.avatar.public_id);
   
         const myCloud = await cloudinary.v2.uploader.upload(avatar, {
-          folder: "avatars",
+          folder: "myAvatars",
         });
         user.avatar.public_id = myCloud.public_id;
         user.avatar.url = myCloud.secure_url;
@@ -316,26 +313,28 @@ exports.myProfile = async (req, res) => {
 
 exports.getUserProfile = async (req, res) => {
     try {
-        const user = await User.findById(req.params.id)
-            .populate("posts followers following")
-        if (!user) {
-            return res.status(404).json({
-                success: false,
-                message: "User not found",
-            });
-        }
-
-        res.status(200).json({
-            success: true,
-            user,
+      const user = await User.findById(req.params.id).populate(
+        "posts followers following"
+      );
+  
+      if (!user) {
+        return res.status(404).json({
+          success: false,
+          message: "User not found",
         });
+      }
+  
+      res.status(200).json({
+        success: true,
+        user,
+      });
     } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: error.message,
-        });
+      res.status(500).json({
+        success: false,
+        message: error.message,
+      });
     }
-}
+  };
 
 exports.getAllUsers = async (req, res) => {
     try {

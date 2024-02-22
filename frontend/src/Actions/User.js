@@ -154,7 +154,7 @@ export const getAllUsers =
     }
   };
 
-  export const updateProfile = (name, email,password, avatar) => async (dispatch) => {
+  export const updateProfile = (name, email, avatar) => async (dispatch) => {
     try {
       console.log(avatar);
       dispatch({
@@ -211,6 +211,7 @@ export const getAllUsers =
     }
   };
 
+  
   export const deleteMyProfile = () => async (dispatch) => {
     try {
       dispatch({

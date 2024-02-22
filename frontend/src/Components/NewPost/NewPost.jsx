@@ -4,7 +4,7 @@ import { useAlert } from 'react-alert';
 import { useDispatch, useSelector } from 'react-redux';
 import "./NewPost.css"
 import { createNewPost } from '../../Actions/Post';
-import { getMyPosts, loadUser } from '../../Actions/User';
+import { loadUser } from '../../Actions/User';
 
 
 const NewPost = () => {

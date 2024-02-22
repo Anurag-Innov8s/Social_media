@@ -29,11 +29,9 @@ const Account = () => {
     alert.success("Logged out successfully");
   };
 
-  const deleteProfileHandler = async () => {
-    await dispatch(deleteMyProfile());
-    dispatch(logoutUser());
-    
-    
+  const deleteProfileHandler = () => {
+    dispatch(deleteMyProfile());
+    dispatch(logoutUser()); 
   };
 
   useEffect(() => {

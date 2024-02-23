@@ -30,11 +30,13 @@ const Account = () => {
   };
 
   const deleteProfileHandler = () => {
+    dispatch(logoutUser());
     dispatch(deleteMyProfile());
-    dispatch(logoutUser()); 
+    alert.success("Account Deleted Successfully")
+     
   };
 
-  useEffect(() => {
+  useEffect(() => { 
     dispatch(getMyPosts());
   }, [dispatch]);
 
@@ -110,12 +112,12 @@ const Account = () => {
           Logout
         </Button>
 
-        <Link to="/update/profile">Edit Profile</Link>
-        <Link to="/update/password">Change Password</Link>
+        <Link to="/update/profile" style={{ fontFamily: "Helvetica, Arial, sans-serif", margin: "2vmax", fontWeight: "bold", fontSize: "18px"}}>Edit Profile</Link>
+        <Link to="/update/password" style={{ fontFamily: "Helvetica, Arial, sans-serif", margin: "2vmax", fontWeight: "bold", fontSize: "18px"}}>Change Password</Link>
 
         <Button
           variant="text"
-          style={{ color: "red", margin: "2vmax" }}
+          style={{ fontFamily: "Helvetica, Arial, sans-serif", color: "red", margin: "2vmax", fontWeight: "bold", fontSize: "18px"}}
           onClick={deleteProfileHandler}
           disabled={deleteLoading}
         >
@@ -139,7 +141,7 @@ const Account = () => {
                 />
               ))
             ) : (
-              <Typography style={{ margin: "2vmax" }}>
+              <Typography style={{ margin: "2vmax", fontWeight: "bold", fontSize: "16px"}}>
                 You have no followers
               </Typography>
             )}

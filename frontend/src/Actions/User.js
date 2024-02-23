@@ -136,7 +136,7 @@ export const getAllUsers =
     }
   };
 
-  export const logoutUser = (email, password) => async (dispatch) => {
+  export const logoutUser = () => async (dispatch) => {
     try {
       dispatch({
         type: "LogoutUserRequest",

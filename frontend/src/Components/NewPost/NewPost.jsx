@@ -14,16 +14,43 @@ const NewPost = () => {
     const dispatch = useDispatch();
     const alert = useAlert();
     const handleImageChange = (e) => {
-        const file = e.target.files[0];
+        const file = e.target.files?.[0];
 
-        const Reader = new FileReader();
-        Reader.readAsDataURL(file);
-        Reader.onload = () => {
-            if (Reader.readyState === 2) {
-                setImage(Reader.result)
+        if (file) {
+            const Reader = new FileReader();
+            Reader.readAsDataURL(file);
+            Reader.onload = () => {
+                if (Reader.readyState === 2) {
+                    setImage(Reader.result)
+                }
             }
         }
-        
+
+
+
+
+
+
+        // const file = event.target.files?.[0];
+
+        // if (file) {
+        //     setSelectedImage(file);
+        //     const reader = new FileReader();
+
+        //     reader.onload = (event) => {
+        //         const result = event.target?.result;
+        //         if (result) {
+        //             setShowImage(result as string);
+        //         }
+        //     };
+
+        //     reader.readAsDataURL(file);
+        // }
+
+
+
+
+
     }
     const submitHandler = async (e) => {
         e.preventDefault();
@@ -31,16 +58,16 @@ const NewPost = () => {
         dispatch(loadUser());
     };
 
-    useEffect(()=>{
-        if(error){
+    useEffect(() => {
+        if (error) {
             alert.error(error);
-            dispatch({type:"clearErrors"})
+            dispatch({ type: "clearErrors" })
         }
-        if(message){
+        if (message) {
             alert.success(message);
-            dispatch({type:"clearMessage"})
+            dispatch({ type: "clearMessage" })
         }
-    },[dispatch,error,message,alert])
+    }, [dispatch, error, message, alert])
 
     return (
         <div className='newPost'>
@@ -49,7 +76,7 @@ const NewPost = () => {
                 {image && <img src={image} alt="post" />}
                 <input type="file" accept="image/*" onChange={handleImageChange} />
                 <input type='text' placeholder='Caption...' value={caption}
-                onChange={(e)=>setCaption(e.target.value)}
+                    onChange={(e) => setCaption(e.target.value)}
                 ></input>
                 <Button disabled={loading} type='submit'>Post</Button>
             </form>

@@ -42,7 +42,7 @@ const Register = () => {
     return (
         <div className='register'>
             <form className='registerForm' onSubmit={submitHandler}>
-                <Typography variant='h3' style={{ padding: "2vmax" }}>Social App</Typography>
+                <Typography variant='h3' style={{ padding: "2vmax" }}>Soci-O-rbit</Typography>
 
                 <Avatar src={avatar} alt='User' sx={{ height: "10vmax", width: "10vmax" }}></Avatar>
 

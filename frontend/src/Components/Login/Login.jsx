@@ -37,7 +37,7 @@ const Login = () => {
     <div className="login">
       <form className="loginForm" onSubmit={loginHandler}>
         <Typography variant="h3" style={{ padding: "2vmax" }}>
-          Social Aap
+          Soci-O-rbit
         </Typography>
 
         <input

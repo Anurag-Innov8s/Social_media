@@ -8,7 +8,9 @@ cloudinary.config({
     api_key:process.env.CLOUDINARY_API_KEY,
     api_secret:process.env.CLOUDINARY_API_SECRET,
 })
-
+app.get("/", (req, res) => {
+    res.json({ message: "Hello I am Backend" });
+  });
 app.listen(process.env.PORT,()=>{
     console.log(`Server is running on Port ${process.env.PORT}`);
 })

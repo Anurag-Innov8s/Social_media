@@ -16,6 +16,7 @@
     box-sizing: border-box;
   }
   .homeright {
+    background-image: linear-gradient(to right, #fff5bc, #cec1ff);
     padding: 2vmax;
     box-sizing: border-box;
     overflow-y: auto;

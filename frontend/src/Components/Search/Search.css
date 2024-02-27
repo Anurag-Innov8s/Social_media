@@ -41,7 +41,7 @@
     margin: 2vmax;
   }
   
-  @media screen and (max-width: 600px) {
+  @media screen and (max-width: 768px) {
     .searchForm {
       width: 100%;
     }

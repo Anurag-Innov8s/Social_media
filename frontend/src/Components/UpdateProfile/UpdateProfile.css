@@ -47,7 +47,7 @@
     cursor: pointer;
   }
   
-  @media screen and (max-width: 600px) {
+  @media screen and (max-width: 768px) {
     .updateProfileForm {
       width: 100%;
     }

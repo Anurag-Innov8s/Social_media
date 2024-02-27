@@ -68,7 +68,7 @@
   padding: 0.5vmax 1vmax;
 }
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 60px) {
   .account {
     grid-template-columns: 2fr 1fr;
   }

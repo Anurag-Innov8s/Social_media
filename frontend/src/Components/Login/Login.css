@@ -38,7 +38,7 @@
     margin: 2vmax;
   }
   
-  @media screen and (max-width: 600px) {
+  @media screen and (max-width: 768px) {
     .loginForm {
       width: 100%;
     }

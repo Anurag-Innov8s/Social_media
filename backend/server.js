@@ -4,8 +4,10 @@ const cloudinary = require('cloudinary')
 const port = process.env.PORT || 5000;
 const path = require("path")
 const express = require("express")
-connectDatabase()
+const cors = require("cors")
 
+connectDatabase()
+app.use(cors());
 cloudinary.config({
     cloud_name: process.env.CLOUDINARY_NAME,
     api_key:process.env.CLOUDINARY_API_KEY,

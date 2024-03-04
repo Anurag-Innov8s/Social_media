@@ -36,7 +36,7 @@ export const registerUser = (name, email, password, avatar) => async (dispatch) 
     });
 
     const { data } = await axios.post(
-      "/register",
+      "z/register",
       { name, email, password, avatar },
       {
         headers: {
@@ -156,7 +156,6 @@ export const getAllUsers =
 
   export const updateProfile = (name, email, avatar) => async (dispatch) => {
     try {
-      console.log(avatar);
       dispatch({
         type: "updateProfileRequest",
       });

@@ -16,7 +16,6 @@
   overflow-y: auto;
 }
 .accountright {
-  background-image: linear-gradient(to right, #fff5bc, #cec1ff);
   padding: 2vmax;
   box-sizing: border-box;
   overflow-y: auto;
@@ -68,7 +67,7 @@
   padding: 0.5vmax 1vmax;
 }
 
-@media screen and (max-width: 60px) {
+@media screen and (max-width: 600px) {
   .account {
     grid-template-columns: 2fr 1fr;
   }

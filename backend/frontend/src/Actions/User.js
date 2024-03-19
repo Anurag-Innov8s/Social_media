@@ -36,7 +36,7 @@ export const registerUser = (name, email, password, avatar) => async (dispatch) 
     });
 
     const { data } = await axios.post(
-      "z/register",
+      "/register",
       { name, email, password, avatar },
       {
         headers: {

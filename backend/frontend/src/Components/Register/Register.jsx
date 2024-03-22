@@ -46,7 +46,7 @@ const Register = () => {
 
                 <Avatar src={avatar} alt='User' sx={{ height: "10vmax", width: "10vmax" }}></Avatar>
 
-                <input type='file' accept='image/*' onChange={handleImageChange}></input>
+                <input type='file' accept='image/*' onChange={handleImageChange} required></input>
 
                 <input
                     type='text'

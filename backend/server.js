@@ -23,6 +23,9 @@ cloudinary.config({
 //         }
 //     )
 // })
+app.get("/", (req, res) => {
+    res.json({ message: "Hello I am Backend" });
+  });
 app.listen(process.env.PORT,()=>{
     console.log(`Server is running on Port ${port}`);
 })

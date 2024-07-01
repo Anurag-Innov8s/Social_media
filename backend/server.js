@@ -13,16 +13,16 @@ cloudinary.config({
     api_key:process.env.CLOUDINARY_API_KEY,
     api_secret:process.env.CLOUDINARY_API_SECRET,
 })
-app.use(express.static(path.join(__dirname, "./frontend/build")))
+// app.use(express.static(path.join(__dirname, "./frontend/build")))
 
-app.get("*",(req,res)=>{
-    res.sendFile(
-        path.join(__dirname,"./frontend/build/index.html"),
-        function(err){
-            res.status(500).send(err)
-        }
-    )
-})
+// app.get("*",(req,res)=>{
+//     res.sendFile(
+//         path.join(__dirname,"./frontend/build/index.html"),
+//         function(err){
+//             res.status(500).send(err)
+//         }
+//     )
+// })
 app.listen(process.env.PORT,()=>{
     console.log(`Server is running on Port ${port}`);
 })

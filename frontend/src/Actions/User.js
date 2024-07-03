@@ -1,12 +1,11 @@
-import axios from "axios";
-
+import api from "../api";
 export const loginUser = (email, password) => async (dispatch) => {
   try {
     dispatch({
       type: "LoginRequest",
     });
 
-    const { data } = await axios.post(
+    const { data } = await api.post(
       "/login",
       { email, password },
       {
@@ -35,7 +34,7 @@ export const registerUser = (name, email, password, avatar) => async (dispatch) 
       type: "RegisterRequest",
     });
 
-    const { data } = await axios.post(
+    const { data } = await api.post(
       "/register",
       { name, email, password, avatar },
       {
@@ -63,7 +62,7 @@ export const loadUser = () => async (dispatch) => {
       type: "LoadUserRequest",
     });
 
-    const { data } = await axios.get("/me");
+    const { data } = await api.get("/me");
 
     dispatch({
       type: "LoadUserSuccess",
@@ -83,7 +82,7 @@ export const getFollowingPosts = () => async (dispatch) => {
       type: "postOfFollowingRequest",
     });
 
-    const { data } = await axios.get("/posts");
+    const { data } = await api.get("/posts");
     dispatch({
       type: "postOfFollowingSuccess",
       payload: data.posts,
@@ -102,7 +101,7 @@ export const getMyPosts = () => async (dispatch) => {
       type: "myPostsRequest",
     });
 
-    const { data } = await axios.get("/my/posts");
+    const { data } = await api.get("/my/posts");
     dispatch({
       type: "myPostsSuccess",
       payload: data.posts,
@@ -123,7 +122,7 @@ export const getAllUsers =
         type: "allUsersRequest",
       });
 
-      const { data } = await axios.get(`/users?name=${name}`);
+      const { data } = await api.get(`/users?name=${name}`);
       dispatch({
         type: "allUsersSuccess",
         payload: data.users,
@@ -142,7 +141,7 @@ export const getAllUsers =
         type: "LogoutUserRequest",
       });
   
-      await axios.get("/logout")
+      await api.get("/logout")
       dispatch({
         type: "LogoutUserSuccess",
       });
@@ -160,7 +159,7 @@ export const getAllUsers =
         type: "updateProfileRequest",
       });
   
-      const { data } = await axios.put(
+      const { data } = await api.put(
         "/update/profile",
         { name, email, avatar },
         {
@@ -188,7 +187,7 @@ export const getAllUsers =
         type: "updatePasswordRequest",
       });
   
-      const { data } = await axios.put(
+      const { data } = await api.put(
         "/update/password",
         {oldPassword, newPassword },
         {
@@ -217,7 +216,7 @@ export const getAllUsers =
         type: "deleteProfileRequest",
       });
   
-      const { data } = await axios.delete(
+      const { data } = await api.delete(
         "/delete/me",
       );
   
@@ -239,7 +238,7 @@ export const getAllUsers =
         type: "forgotPasswordRequest",
       });
   
-      const { data } = await axios.post(
+      const { data } = await api.post(
         "/forgot/password",
         {email},
         {headers:{
@@ -265,7 +264,7 @@ export const getAllUsers =
         type: "resetPasswordRequest",
       });
   
-      const { data } = await axios.put(
+      const { data } = await api.put(
         `/password/reset/${token}`,
         {password},
         {headers:{
@@ -291,7 +290,7 @@ export const getAllUsers =
         type: "userPostsRequest",
       });
   
-      const { data } = await axios.get(`/user/posts/${id}`);
+      const { data } = await api.get(`/user/posts/${id}`);
       dispatch({
         type: "userPostsSuccess",
         payload: data.posts,
@@ -310,7 +309,7 @@ export const getAllUsers =
         type: "userProfileRequest",
       });
   
-      const { data } = await axios.get(`/user/${id}`);
+      const { data } = await api.get(`/user/${id}`);
       dispatch({
         type: "userProfileSuccess",
         payload: data.user,
@@ -329,7 +328,7 @@ export const getAllUsers =
         type: "followUserRequest",
       });
   
-      const { data } = await axios.get(`/follow/${id}`);
+      const { data } = await api.get(`/follow/${id}`);
       dispatch({
         type: "followUserSuccess",
         payload: data.posts,
